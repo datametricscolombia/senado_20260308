@@ -23,14 +23,24 @@ th { background:#003366; color:white; }
 <header><h1>Resultados Senado 2026</h1></header>
 <div class="container">
   <div class="breadcrumb" id="breadcrumb"></div>
-  <label for="mesa-select">Seleccione una mesa:</label>
-  <select id="mesa-select">
-    <option value="">Seleccione una mesa</option>
-  </select>
+
+  <label>Departamento:</label>
+  <select id="dep-select"><option value="">Seleccione departamento</option></select>
+
+  <label>Municipio:</label>
+  <select id="mun-select"><option value="">Seleccione municipio</option></select>
+
+  <label>Zona:</label>
+  <select id="zona-select"><option value="">Seleccione zona</option></select>
+
+  <label>Puesto:</label>
+  <select id="puesto-select"><option value="">Seleccione puesto</option></select>
+
+  <label>Mesa:</label>
+  <select id="mesa-select"><option value="">Seleccione mesa</option></select>
+
   <table id="results-table">
-    <thead>
-      <tr><th>Partido</th><th>Votos</th><th>Ranking</th></tr>
-    </thead>
+    <thead><tr><th>Partido</th><th>Votos</th><th>Ranking</th></tr></thead>
     <tbody></tbody>
   </table>
   <button class="button-download" id="download-csv">Descargar CSV</button>
@@ -39,43 +49,79 @@ th { background:#003366; color:white; }
 <script>
 const BASE_URL = "https://datametricscolombia.github.io/senado_20260308/senado";
 const INDEX_FILE = `${BASE_URL}/index_hierarquico.json`;
+let INDEX_DATA = {};
 const cache = {};
 
 async function cargarIndice() {
     const res = await fetch(INDEX_FILE);
-    return res.json();
+    INDEX_DATA = await res.json();
+    llenarDepartamentos();
 }
 
-function generarOpciones(index) {
-    const select = document.getElementById("mesa-select");
-    const options = [];
-    for (const depKey in index.departamentos) {
-        const dep = index.departamentos[depKey];
-        const depNombre = dep.nombre || depKey;
-        if (!dep.municipios) continue;
-        for (const munKey in dep.municipios) {
-            const mun = dep.municipios[munKey];
-            if (!mun.zonas) continue;
-            for (const zonaKey in mun.zonas) {
-                const zona = mun.zonas[zonaKey];
-                if (!zona.puestos) continue;
-                for (const puestoKey in zona.puestos) {
-                    const puesto = zona.puestos[puestoKey];
-                    if (!puesto.mesas) continue;
-                    for (const mesaKey in puesto.mesas) {
-                        const mesa = puesto.mesas[mesaKey];
-                        const label = `${depNombre} / ${munKey} / ${zonaKey} / ${puestoKey} / ${mesaKey}`;
-                        const option = document.createElement("option");
-                        option.value = mesa.url;
-                        option.textContent = label;
-                        select.appendChild(option);
-                        options.push(option);
-                    }
-                }
-            }
-        }
+function llenarDepartamentos() {
+    const depSelect = document.getElementById("dep-select");
+    depSelect.innerHTML = '<option value="">Seleccione departamento</option>';
+    for (const depKey in INDEX_DATA.departamentos) {
+        const dep = INDEX_DATA.departamentos[depKey];
+        const nombre = dep.nombre || depKey;
+        const option = document.createElement("option");
+        option.value = depKey;
+        option.textContent = `${depKey} - ${nombre}`;
+        depSelect.appendChild(option);
     }
-    return options;
+}
+
+function llenarMunicipios(depKey) {
+    const munSelect = document.getElementById("mun-select");
+    munSelect.innerHTML = '<option value="">Seleccione municipio</option>';
+    if (!depKey) return;
+    const dep = INDEX_DATA.departamentos[depKey];
+    for (const munKey in dep.municipios) {
+        const option = document.createElement("option");
+        option.value = munKey;
+        option.textContent = munKey;
+        munSelect.appendChild(option);
+    }
+}
+
+function llenarZonas(depKey, munKey) {
+    const zonaSelect = document.getElementById("zona-select");
+    zonaSelect.innerHTML = '<option value="">Seleccione zona</option>';
+    if (!depKey || !munKey) return;
+    const dep = INDEX_DATA.departamentos[depKey];
+    const mun = dep.municipios[munKey];
+    for (const zonaKey in mun.zonas) {
+        const option = document.createElement("option");
+        option.value = zonaKey;
+        option.textContent = zonaKey;
+        zonaSelect.appendChild(option);
+    }
+}
+
+function llenarPuestos(depKey, munKey, zonaKey) {
+    const puestoSelect = document.getElementById("puesto-select");
+    puestoSelect.innerHTML = '<option value="">Seleccione puesto</option>';
+    if (!depKey || !munKey || !zonaKey) return;
+    const zona = INDEX_DATA.departamentos[depKey].municipios[munKey].zonas[zonaKey];
+    for (const puestoKey in zona.puestos) {
+        const option = document.createElement("option");
+        option.value = puestoKey;
+        option.textContent = puestoKey;
+        puestoSelect.appendChild(option);
+    }
+}
+
+function llenarMesas(depKey, munKey, zonaKey, puestoKey) {
+    const mesaSelect = document.getElementById("mesa-select");
+    mesaSelect.innerHTML = '<option value="">Seleccione mesa</option>';
+    if (!depKey || !munKey || !zonaKey || !puestoKey) return;
+    const puesto = INDEX_DATA.departamentos[depKey].municipios[munKey].zonas[zonaKey].puestos[puestoKey];
+    for (const mesaKey in puesto.mesas) {
+        const option = document.createElement("option");
+        option.value = puesto.mesas[mesaKey].url;
+        option.textContent = mesaKey;
+        mesaSelect.appendChild(option);
+    }
 }
 
 async function cargarMesa(url) {
@@ -116,19 +162,35 @@ function descargarCSV(data,nombreArchivo){
     link.click();
 }
 
-async function init() {
-    const index = await cargarIndice();
-    generarOpciones(index);
-    const select = document.getElementById("mesa-select");
-    select.addEventListener("change", e=>cargarMesa(e.target.value));
-    // cargar primera mesa automáticamente si existe
-    if (select.options.length > 1) {
-        select.selectedIndex = 1;
-        cargarMesa(select.value);
-    }
-}
+document.getElementById("dep-select").addEventListener("change",(e)=>{
+    llenarMunicipios(e.target.value);
+    document.getElementById("zona-select").innerHTML='<option value="">Seleccione zona</option>';
+    document.getElementById("puesto-select").innerHTML='<option value="">Seleccione puesto</option>';
+    document.getElementById("mesa-select").innerHTML='<option value="">Seleccione mesa</option>';
+});
+document.getElementById("mun-select").addEventListener("change",(e)=>{
+    const depKey = document.getElementById("dep-select").value;
+    llenarZonas(depKey,e.target.value);
+    document.getElementById("puesto-select").innerHTML='<option value="">Seleccione puesto</option>';
+    document.getElementById("mesa-select").innerHTML='<option value="">Seleccione mesa</option>';
+});
+document.getElementById("zona-select").addEventListener("change",(e)=>{
+    const depKey = document.getElementById("dep-select").value;
+    const munKey = document.getElementById("mun-select").value;
+    llenarPuestos(depKey,munKey,e.target.value);
+    document.getElementById("mesa-select").innerHTML='<option value="">Seleccione mesa</option>';
+});
+document.getElementById("puesto-select").addEventListener("change",(e)=>{
+    const depKey = document.getElementById("dep-select").value;
+    const munKey = document.getElementById("mun-select").value;
+    const zonaKey = document.getElementById("zona-select").value;
+    llenarMesas(depKey,munKey,zonaKey,e.target.value);
+});
+document.getElementById("mesa-select").addEventListener("change",(e)=>{
+    cargarMesa(e.target.value);
+});
 
-init();
+cargarIndice();
 </script>
 </body>
 </html>
