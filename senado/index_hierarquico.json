@@ -1,23 +1,23 @@
 {
   "pais": {
-    "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/pais.json"
+    "url": "https://datametricscolombia.github.io/senado_20260308/senado/pais.json"
   },
   "departamentos": {
     "03": {
       "nombre": "Atlántico",
-      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_03_Atlántico/departamento_03.json",
+      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_03_Atlántico/departamento_03.json",
       "municipios": {
         "03034": {
-          "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_03_Atlántico/municipio_03034/municipio_03034.json",
+          "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_03_Atlántico/municipio_03034/municipio_03034.json",
           "zonas": {
             "0303499": {
-              "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_03_Atlántico/municipio_03034/zona_0303499/zona_0303499.json",
+              "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_03_Atlántico/municipio_03034/zona_0303499/zona_0303499.json",
               "puestos": {
                 "030349901": {
-                  "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_03_Atlántico/municipio_03034/zona_0303499/puesto_030349901/puesto_030349901.json",
+                  "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_03_Atlántico/municipio_03034/zona_0303499/puesto_030349901/puesto_030349901.json",
                   "mesas": {
                     "030349901002": {
-                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_03_Atlántico/municipio_03034/zona_0303499/puesto_030349901/mesa_030349901002/mesa_030349901002.json"
+                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_03_Atlántico/municipio_03034/zona_0303499/puesto_030349901/mesa_030349901002/mesa_030349901002.json"
                     }
                   }
                 }
@@ -29,19 +29,19 @@
     },
     "07": {
       "nombre": "Boyacá",
-      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_07_Boyacá/departamento_07.json",
+      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_07_Boyacá/departamento_07.json",
       "municipios": {
         "07049": {
-          "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_07_Boyacá/municipio_07049/municipio_07049.json",
+          "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_07_Boyacá/municipio_07049/municipio_07049.json",
           "zonas": {
             "0704999": {
-              "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_07_Boyacá/municipio_07049/zona_0704999/zona_0704999.json",
+              "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_07_Boyacá/municipio_07049/zona_0704999/zona_0704999.json",
               "puestos": {
                 "070499925": {
-                  "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_07_Boyacá/municipio_07049/zona_0704999/puesto_070499925/puesto_070499925.json",
+                  "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_07_Boyacá/municipio_07049/zona_0704999/puesto_070499925/puesto_070499925.json",
                   "mesas": {
                     "070499925003": {
-                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_07_Boyacá/municipio_07049/zona_0704999/puesto_070499925/mesa_070499925003/mesa_070499925003.json"
+                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_07_Boyacá/municipio_07049/zona_0704999/puesto_070499925/mesa_070499925003/mesa_070499925003.json"
                     }
                   }
                 }
@@ -53,19 +53,19 @@
     },
     "09": {
       "nombre": "Caldas",
-      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_09_Caldas/departamento_09.json",
+      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_09_Caldas/departamento_09.json",
       "municipios": {
         "09034": {
-          "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_09_Caldas/municipio_09034/municipio_09034.json",
+          "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_09_Caldas/municipio_09034/municipio_09034.json",
           "zonas": {
             "0903499": {
-              "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_09_Caldas/municipio_09034/zona_0903499/zona_0903499.json",
+              "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_09_Caldas/municipio_09034/zona_0903499/zona_0903499.json",
               "puestos": {
                 "090349903": {
-                  "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_09_Caldas/municipio_09034/zona_0903499/puesto_090349903/puesto_090349903.json",
+                  "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_09_Caldas/municipio_09034/zona_0903499/puesto_090349903/puesto_090349903.json",
                   "mesas": {
                     "090349903003": {
-                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_09_Caldas/municipio_09034/zona_0903499/puesto_090349903/mesa_090349903003/mesa_090349903003.json"
+                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_09_Caldas/municipio_09034/zona_0903499/puesto_090349903/mesa_090349903003/mesa_090349903003.json"
                     }
                   }
                 }
@@ -77,22 +77,22 @@
     },
     "16": {
       "nombre": "Bogotá",
-      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_16_Bogotá/departamento_16.json",
+      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_16_Bogotá/departamento_16.json",
       "municipios": {
         "16001": {
-          "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_16_Bogotá/municipio_16001/municipio_16001.json",
+          "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_16_Bogotá/municipio_16001/municipio_16001.json",
           "zonas": {
             "1600113": {
-              "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_16_Bogotá/municipio_16001/zona_1600113/zona_1600113.json",
+              "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_16_Bogotá/municipio_16001/zona_1600113/zona_1600113.json",
               "puestos": {
                 "160011310": {
-                  "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_16_Bogotá/municipio_16001/zona_1600113/puesto_160011310/puesto_160011310.json",
+                  "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_16_Bogotá/municipio_16001/zona_1600113/puesto_160011310/puesto_160011310.json",
                   "mesas": {
                     "160011310001": {
-                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_16_Bogotá/municipio_16001/zona_1600113/puesto_160011310/mesa_160011310001/mesa_160011310001.json"
+                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_16_Bogotá/municipio_16001/zona_1600113/puesto_160011310/mesa_160011310001/mesa_160011310001.json"
                     },
                     "160011310027": {
-                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_16_Bogotá/municipio_16001/zona_1600113/puesto_160011310/mesa_160011310027/mesa_160011310027.json"
+                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_16_Bogotá/municipio_16001/zona_1600113/puesto_160011310/mesa_160011310027/mesa_160011310027.json"
                     }
                   }
                 }
@@ -104,19 +104,19 @@
     },
     "46": {
       "nombre": "Casanare",
-      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_46_Casanare/departamento_46.json",
+      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_46_Casanare/departamento_46.json",
       "municipios": {
         "46540": {
-          "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_46_Casanare/municipio_46540/municipio_46540.json",
+          "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_46_Casanare/municipio_46540/municipio_46540.json",
           "zonas": {
             "4654099": {
-              "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_46_Casanare/municipio_46540/zona_4654099/zona_4654099.json",
+              "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_46_Casanare/municipio_46540/zona_4654099/zona_4654099.json",
               "puestos": {
                 "465409928": {
-                  "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_46_Casanare/municipio_46540/zona_4654099/puesto_465409928/puesto_465409928.json",
+                  "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_46_Casanare/municipio_46540/zona_4654099/puesto_465409928/puesto_465409928.json",
                   "mesas": {
                     "465409928001": {
-                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/senado/departamento_46_Casanare/municipio_46540/zona_4654099/puesto_465409928/mesa_465409928001/mesa_465409928001.json"
+                      "url": "https://datametricscolombia.github.io/senado_20260308/senado/departamento_46_Casanare/municipio_46540/zona_4654099/puesto_465409928/mesa_465409928001/mesa_465409928001.json"
                     }
                   }
                 }
