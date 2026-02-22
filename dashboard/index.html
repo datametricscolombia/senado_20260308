@@ -16,6 +16,7 @@ th { background:#003366; color:white; }
 .breadcrumb span { margin-right:0.5rem; }
 .button-download { margin-top:1rem; background:#003366; color:white; border:none; padding:0.5rem; cursor:pointer; }
 .button-download:hover { background:#0055a5; }
+.total-votos { margin-top:1rem; background:#fffbcc; padding:1rem; font-weight:bold; text-align:center; border:2px solid #ffd700; font-size:1.2rem; }
 @media (max-width:768px) { table, th, td { font-size:0.8rem; } }
 </style>
 </head>
@@ -43,6 +44,9 @@ th { background:#003366; color:white; }
     <thead><tr><th>Partido</th><th>Votos</th><th>Ranking</th></tr></thead>
     <tbody></tbody>
   </table>
+
+  <div id="total-votos" class="total-votos" style="display:none;"></div>
+
   <button class="button-download" id="download-csv">Descargar CSV</button>
 </div>
 
@@ -136,18 +140,27 @@ async function cargarMesa(url) {
         data = await res.json();
         cache[url] = data;
     }
+
     const partidos = Object.keys(data).filter(k => k !== "Total votos");
     const ranking = partidos.map(p => ({partido:p,votos:parseInt(data[p])}))
                             .sort((a,b)=>b.votos - a.votos);
+
     ranking.forEach((r,i)=>{
         const tr = document.createElement("tr");
         tr.innerHTML = `<td>${r.partido}</td><td>${r.votos}</td><td>${i+1}</td>`;
         tbody.appendChild(tr);
     });
+
+    // Mostrar Total votos
+    const totalDiv = document.getElementById("total-votos");
+    totalDiv.style.display = "block";
+    totalDiv.textContent = `Total votos en esta mesa: ${data["Total votos"]}`;
+
     // Breadcrumb
     const breadcrumb = document.getElementById("breadcrumb");
     const path = url.replace(BASE_URL+"/","").split("/");
     breadcrumb.innerHTML = path.map(p=>`<span>${p}</span>`).join(" > ");
+
     // CSV
     document.getElementById("download-csv").onclick = ()=>descargarCSV(ranking, url.split("/").pop());
 }
