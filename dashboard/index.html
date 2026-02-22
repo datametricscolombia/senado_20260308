@@ -3,158 +3,195 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Senado 2026</title>
+<title>Resultados Senado 2026</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f2f2f2; }
-  header { background: #0055a5; color: white; padding: 1rem; text-align: center; }
-  nav.breadcrumb { padding: 0.5rem 1rem; background: #e6e6e6; font-size: 0.9rem; }
-  nav.breadcrumb a { color: #0055a5; text-decoration: none; margin-right: 0.5rem; }
-  nav.breadcrumb a:hover { text-decoration: underline; }
-  main { padding: 1rem; }
-  table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-  th, td { border: 1px solid #ccc; padding: 0.5rem; text-align: left; }
-  th { background: #ddd; }
-  button { background: #0055a5; color: white; padding: 0.5rem 1rem; border: none; cursor: pointer; margin-top: 1rem; }
-  button:hover { background: #003f7f; }
-  @media(max-width:600px){
-    table, th, td { font-size: 0.8rem; }
-    nav.breadcrumb { font-size: 0.8rem; }
-  }
+/* ===== Estilo estilo Registraduría ===== */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background-color: #003366;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+.container {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: auto;
+}
+select, table, button {
+    width: 100%;
+    margin-top: 1rem;
+}
+table {
+    border-collapse: collapse;
+    background-color: white;
+}
+th, td {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+th {
+    background-color: #003366;
+    color: white;
+}
+.breadcrumb {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+.breadcrumb span {
+    margin-right: 0.5rem;
+}
+.button-download {
+    margin-top: 1rem;
+    background-color: #003366;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+}
+.button-download:hover {
+    background-color: #0055a5;
+}
+@media (max-width: 768px) {
+    table, th, td {
+        font-size: 0.8rem;
+    }
+}
 </style>
 </head>
 <body>
-
 <header>
-  <h1>Dashboard Senado 2026</h1>
+    <h1>Resultados Senado 2026</h1>
 </header>
+<div class="container">
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <label for="mesa-select">Seleccione una mesa:</label>
+    <select id="mesa-select"></select>
 
-<nav class="breadcrumb" id="breadcrumb">
-  <!-- Breadcrumb dinámico -->
-</nav>
+    <table id="results-table">
+        <thead>
+            <tr>
+                <th>Partido</th>
+                <th>Votos</th>
+                <th>Ranking</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 
-<main>
-  <h2 id="mesa-title">Seleccione una mesa</h2>
-  <table id="mesa-table" style="display:none;">
-    <thead>
-      <tr>
-        <th>Partido</th>
-        <th>Votos</th>
-      </tr>
-    </thead>
-    <tbody id="mesa-body"></tbody>
-  </table>
-  <button id="download-csv" style="display:none;">Descargar CSV</button>
-</main>
+    <button class="button-download" id="download-csv">Descargar CSV</button>
+</div>
 
 <script>
-// URL base de GitHub Pages
+// ===== Config =====
 const BASE_URL = "https://datametricscolombia.github.io/senado_20260308/senado";
+const INDEX_FILE = `${BASE_URL}/index_hierarquico.json`;
 
-// Caché local
+// Cache de mesas para no recargar JSON
 const cache = {};
 
-// Función para cargar índice jerárquico
+// ===== Funciones =====
 async function cargarIndice() {
-    if (cache['index']) return cache['index'];
-    const resp = await fetch(`${BASE_URL}/index_hierarquico.json`);
-    const data = await resp.json();
-    cache['index'] = data;
-    return data;
+    const res = await fetch(INDEX_FILE);
+    return res.json();
 }
 
-// Función para generar breadcrumb navegable
-function actualizarBreadcrumb(path) {
-    const container = document.getElementById('breadcrumb');
-    container.innerHTML = '';
-    let fullPath = '';
-    path.forEach((item, idx) => {
-        fullPath += (idx === 0 ? '' : '/') + item.name;
-        const a = document.createElement('a');
-        a.href = "#";
-        a.textContent = item.label;
-        a.onclick = () => cargarMesa(item.url);
-        container.appendChild(a);
-        if (idx < path.length -1) container.innerHTML += ' > ';
-    });
-}
-
-// Función para descargar CSV
-function descargarCSV(jsonData) {
-    const rows = [["Partido", "Votos"]];
-    for (const partido in jsonData) {
-        if (partido !== "Total votos") {
-            rows.push([partido, jsonData[partido]]);
-        }
-    }
-    const csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "mesa.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-// Función principal para cargar datos de una mesa
 async function cargarMesa(url) {
-    document.getElementById('mesa-title').textContent = "Cargando...";
+    const tbody = document.querySelector("#results-table tbody");
+    tbody.innerHTML = "";
     let data;
     if (cache[url]) {
         data = cache[url];
     } else {
-        const resp = await fetch(url);
-        data = await resp.json();
+        const res = await fetch(url);
+        data = await res.json();
         cache[url] = data;
     }
 
-    // Actualizar breadcrumb
-    const path = [];
-    const parts = url.replace(BASE_URL+'/', '').split('/');
-    if (parts.length >= 6) {
-        const dep = parts[0].split('_'); // departamento_03_Atlántico
-        path.push({label: dep[2], name: dep[1], url: `${BASE_URL}/${parts[0]}/departamento_${dep[1]}_${dep[2]}.json`});
-        const mun = parts[1].split('_'); // municipio_03034
-        path.push({label: `Municipio ${mun[1]}`, name: mun[1], url: `${BASE_URL}/${parts[0]}/${parts[1]}/${parts[1]}.json`});
-        const zona = parts[2].split('_'); // zona_0303499
-        path.push({label: `Zona ${zona[1]}`, name: zona[1], url: `${BASE_URL}/${parts[0]}/${parts[1]}/${parts[2]}/${parts[2]}.json`});
-        const puesto = parts[3].split('_'); // puesto_030349901
-        path.push({label: `Puesto ${puesto[1]}`, name: puesto[1], url: `${BASE_URL}/${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}/${parts[3]}.json`});
-        const mesa = parts[4].split('_'); // mesa_030349901002
-        path.push({label: `Mesa ${mesa[1]}`, name: mesa[1], url: `${BASE_URL}/${parts[0]}/${parts[1]}/${parts[2]}/${parts[3]}/${parts[4]}/${parts[4]}.json`});
-    }
-    actualizarBreadcrumb(path);
+    // Ordenar por votos descendente
+    const partidos = Object.keys(data).filter(k => k !== "Total votos");
+    const votosOrdenados = partidos.map(p => ({partido: p, votos: data[p]}))
+                                   .sort((a,b) => b.votos - a.votos);
 
-    // Mostrar tabla
-    const tbody = document.getElementById('mesa-body');
-    tbody.innerHTML = '';
-    Object.entries(data).forEach(([partido, votos]) => {
-        if (partido !== "Total votos") {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td>${partido}</td><td>${votos}</td>`;
-            tbody.appendChild(tr);
-        }
+    // Actualizar tabla
+    votosOrdenados.forEach((item, idx) => {
+        const tr = document.createElement("tr");
+        const r = idx + 1;
+        tr.innerHTML = `<td>${item.partido}</td><td>${item.votos}</td><td>${r}</td>`;
+        tbody.appendChild(tr);
     });
-    document.getElementById('mesa-title').textContent = `Mesa ${path[path.length-1].name}`;
-    document.getElementById('mesa-table').style.display = 'table';
-    document.getElementById('download-csv').style.display = 'inline-block';
-    document.getElementById('download-csv').onclick = () => descargarCSV(data);
+
+    // Actualizar breadcrumb
+    const breadcrumb = document.getElementById("breadcrumb");
+    const path = url.replace(BASE_URL + "/", "").split("/");
+    breadcrumb.innerHTML = path.map(p => `<span>${p}</span>`).join(" > ");
+
+    // Preparar CSV para descarga
+    document.getElementById("download-csv").onclick = () => {
+        descargarCSV(votosOrdenados, url.split("/").pop());
+    };
 }
 
-// Inicialización
+function descargarCSV(data, nombreArchivo) {
+    const rows = [["Partido","Votos","Ranking"], ...data.map((d,i)=>[d.partido,d.votos,i+1])];
+    const csv = rows.map(r => r.join(",")).join("\n");
+    const blob = new Blob([csv], {type: "text/csv;charset=utf-8;"});
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = nombreArchivo.replace(".json",".csv");
+    link.click();
+}
+
+// ===== Inicialización =====
 async function init() {
     const index = await cargarIndice();
-    // Por defecto, cargar primera mesa disponible
-    const firstDep = Object.values(index.departamentos)[0];
-    const firstMun = Object.values(firstDep.municipios)[0];
-    const firstZona = Object.values(firstMun.zonas)[0];
-    const firstPuesto = Object.values(firstZona.puestos)[0];
-    const firstMesa = Object.values(firstPuesto.mesas)[0];
-    cargarMesa(firstMesa.url);
+    const select = document.getElementById('mesa-select');
+
+    // Generar opciones para todas las mesas
+    const options = [];
+    for (const depKey in index.departamentos) {
+        const dep = index.departamentos[depKey];
+        for (const munKey in dep.municipios) {
+            const mun = dep.municipios[munKey];
+            for (const zonaKey in mun.zonas) {
+                const zona = mun.zonas[zonaKey];
+                for (const puestoKey in zona.puestos) {
+                    const puesto = zona.puestos[puestoKey];
+                    for (const mesaKey in puesto.mesas) {
+                        const mesa = puesto.mesas[mesaKey];
+                        const label = `${dep.nombre} / ${munKey} / ${zonaKey} / ${puestoKey} / ${mesaKey}`;
+                        options.push({label, url: mesa.url});
+                    }
+                }
+            }
+        }
+    }
+
+    // Llenar select
+    options.forEach(opt => {
+        const option = document.createElement("option");
+        option.value = opt.url;
+        option.textContent = opt.label;
+        select.appendChild(option);
+    });
+
+    // Evento cambio de mesa
+    select.addEventListener('change', e => cargarMesa(e.target.value));
+
+    // Cargar primera mesa por defecto
+    if (options.length) {
+        select.value = options[0].url;
+        cargarMesa(options[0].url);
+    }
 }
 
 init();
 </script>
-
 </body>
 </html>
